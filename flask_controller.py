@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify, make_response
 from read_config import ReadConfig
-from flask_handler import ElasticHandlers
-import json
+from es_operations import ElasticHandlers
 
 handler = ElasticHandlers()
 

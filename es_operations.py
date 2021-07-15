@@ -1,9 +1,13 @@
 #!/usr/bin/python3
 from elasticsearch import Elasticsearch
 from convert_to_dict import ConvertToDict
+from read_config import ReadConfig
 
+config_file = "config_file.conf"
+config = ReadConfig(config_file)
+host_name = config.get_config("config", "hostname")
 conv = ConvertToDict()
-es_client = Elasticsearch()
+es_client = Elasticsearch([host_name])
 
 class ElasticHandlers():
     def __init__(self):
@@ -31,6 +35,7 @@ class ElasticHandlers():
         return result_dict
 
     def es_search(self, index_name, user_id, user_age):
+        result_dict = dict()
         result = es_client.search(index=index_name, body ={"query":{
                                                                 "bool": {
                                                                     "should": [
@@ -48,4 +53,5 @@ class ElasticHandlers():
                                                                         ]
                                                                 }}})
         for hit in result['hits']['hits']:
-            return hit["_source"]
+            result_dict.update(hit["_source"])
+        return result_dict
