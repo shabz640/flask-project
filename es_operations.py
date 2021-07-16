@@ -35,7 +35,8 @@ class ElasticHandlers():
         return result_dict
 
     def es_search(self, index_name, user_id, user_age):
-        result_dict = dict()
+        # result_dict = dict()
+        result_list = []
         result = es_client.search(index=index_name, body ={"query":{
                                                                 "bool": {
                                                                     "should": [
@@ -53,5 +54,5 @@ class ElasticHandlers():
                                                                         ]
                                                                 }}})
         for hit in result['hits']['hits']:
-            result_dict.update(hit["_source"])
-        return result_dict
+            result_list.append(hit["_source"])
+        return result_list
